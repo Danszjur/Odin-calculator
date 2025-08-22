@@ -1,0 +1,60 @@
+:root{
+    --scale: 2;
+    --button-height: calc(30px * var(--scale));
+    --button-width: calc(40px * var(--scale));
+    --button-gap: calc(3px * var(--scale));
+    --display-outside-radius: calc(20px * var(--scale));
+    --font-size-main: calc(1rem * var(--scale));
+    --font-size-secondary:calc(1rem * 0.75 * var(--scale));
+
+
+}
+
+main{
+    background-color: hsl(0, 0%, 40%);
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    padding: 20px;
+    border-radius: 10px;
+}
+.calc-button{
+    width: var(--button-width);
+    height: var(--button-height);
+    color: azure;
+    font-weight: bold;
+    font-size: var(--font-size-main);
+    background-color: hsl(0, 0%, 20%);
+    border: none;
+    box-shadow: 0 3px 5px black;
+    transition: all;
+    transition-duration: 50ms;
+    border-radius: 10px;
+}
+.calc-button:hover{
+    opacity: 0.85;
+}
+.calc-button:active{
+    transform: translateY(3px);
+    opacity: 0.6;
+}
+#button-container{
+    display: grid;
+    grid-template-columns: repeat(4, var(--button-width));
+    grid-template-rows: repeat(5, var(--button-height));
+    gap: var(--button-gap);
+}
+#display-container{
+
+    background-color: hsl(180, 100%, 30%);
+    text-align: end;
+    border: 30px solid hsl(0, 0%, 40%);
+    border-radius: var(--display-outside-radius);
+    padding-right: 10px;
+}
+#previousCalc{
+ font-size: var(--font-size-secondary);
+}
+#displayedNumbers{
+    font-size: var(--font-size-main);
+}
