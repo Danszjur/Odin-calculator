@@ -54,7 +54,9 @@ main{
 }
 #previousCalc{
  font-size: var(--font-size-secondary);
+ height: 40px;
 }
 #displayedNumbers{
     font-size: var(--font-size-main);
+    height: 50px;
 }
