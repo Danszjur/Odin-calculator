@@ -2,9 +2,9 @@ const buttonContainer = document.getElementById('button-container');
 const primaryDisplay = document.getElementById("displayedNumbers");
 const secondaryDisplay = document.getElementById("previousCalc");
 
-let currentNum = 0;
-let prevNum = 0;
-let calcedResult = 0;
+let firstNum = 0;
+let secondNum = 0;
+let operator = "";
 
 const buttonMap = [
     { id: "pow", label: "x²" },
@@ -44,34 +44,33 @@ for (let i = 0; i < buttonMap.length; i++) {
     buttonContainer.appendChild(buttonElement);
 }
 function buttonPressed(e) {
-    console.log(e.target.id);
 
     switch (e.target.id) {
 
-        case 'pow': break;
-        case 'sqr': break;
-        case 'clear': clearMemory(); break;
-        case 'divide': division(); break;
+        case 'pow': operate(''); break;
+        case 'sqr': operate(''); break;
+        case 'clear': clearMemory(); clearDisplays(); console.clear(); break;
+        case 'divide': operate('/'); break;
 
         case 'seven': appendPrimaryDisplay('7'); break;
         case 'eight': appendPrimaryDisplay('8'); break;
         case 'nine': appendPrimaryDisplay('9'); break;
-        case 'multiply': multiplication(); break;
+        case 'multiply': operate('*'); break;
 
         case 'four': appendPrimaryDisplay('4'); break;
         case 'five': appendPrimaryDisplay('5'); break;
         case 'six': appendPrimaryDisplay('6'); break;
-        case 'minus': substraction(); break;
+        case 'minus': operate('-'); break;
 
         case 'one': appendPrimaryDisplay('1'); break;
         case 'two': appendPrimaryDisplay('2'); break;
         case 'three': appendPrimaryDisplay('3'); break;
-        case 'plus': addition(); break;
+        case 'plus': operate('+'); break;
 
-        case 'plusMinus': break;
+        case 'plusMinus': operate(''); break;
         case 'zero': appendPrimaryDisplay('0'); break;
         case 'dot': appendPrimaryDisplay('.'); break;
-        case 'equal': break;
+        case 'equal': operate('='); break;
 
         default: break;
     }
@@ -83,33 +82,46 @@ function appendPrimaryDisplay(stringOfNumber) {
     }
 }
 
-function addition() {
+function clearMemory() {
+    firstNum = 0;
+    secondNum = 0;
+    operator = "";
 }
-function substraction() {
-
-}
-
-function multiplication() {
-}
-function division() {
-}
-function equal() {
-
-}
-
-function operate() {
-
-}
-
 function clearDisplays() {
     primaryDisplay.textContent = "";
     secondaryDisplay.textContent = "";
 }
-function clearMemory() {
-    primaryDisplay.textContent = "";
-    secondaryDisplay.textContent = "";
-    currentNum = 0;
-    prevNum = 0;
-    calcedResult = 0;
+
+function operate(stringOfOperator) {
+    switch (operator) {
+        case '+':
+            firstNum = parseFloat(primaryDisplay.textContent) + firstNum;
+            break;
+        case '/':
+            firstNum = parseFloat(primaryDisplay.textContent) / firstNum;
+            break;
+        case '-':
+            firstNum = parseFloat(primaryDisplay.textContent) - firstNum;
+            break;
+        case '*':
+            console.log(` elso szam${firstNum}`);
+
+            firstNum = parseFloat(primaryDisplay.textContent) * firstNum;
+            break;
+        case '':
+            firstNum = parseFloat(primaryDisplay.textContent);
+            break;
+        case '=':
+            firstNum = parseFloat(primaryDisplay.textContent);
+            break;
+
+        default:
+            break;
+    }
+
+    operator = stringOfOperator;
+    clearDisplays();
+    console.log(firstNum);
+
 }
 
