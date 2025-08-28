@@ -6,6 +6,13 @@ let firstNum = 0;
 let secondNum = 0;
 let operator = "";
 
+let equalWasPressed = true;
+
+let isNewCalc = true;
+
+let inCalculating = false;
+let result = 0;
+
 const buttonMap = [
     { id: "pow", label: "x²" },
     { id: "sqr", label: "√" },
@@ -32,7 +39,6 @@ const buttonMap = [
     { id: "dot", label: "." },
     { id: "equal", label: "=" },
 ];
-
 for (let i = 0; i < buttonMap.length; i++) {
     const buttonElement = document.createElement("button");
     buttonElement.className = "calc-button";
@@ -59,7 +65,6 @@ function buttonPressed(e) {
         case "divide":
             operate("/");
             break;
-
         case "seven":
             appendPrimaryDisplay("7");
             break;
@@ -72,7 +77,6 @@ function buttonPressed(e) {
         case "multiply":
             operate("*");
             break;
-
         case "four":
             appendPrimaryDisplay("4");
             break;
@@ -85,7 +89,6 @@ function buttonPressed(e) {
         case "minus":
             operate("-");
             break;
-
         case "one":
             appendPrimaryDisplay("1");
             break;
@@ -98,7 +101,6 @@ function buttonPressed(e) {
         case "plus":
             operate("+");
             break;
-
         case "plusMinus":
             operate("");
             break;
@@ -116,30 +118,33 @@ function buttonPressed(e) {
             break;
     }
 }
-
-let wasNumberAfter = false;
 function appendPrimaryDisplay(stringOfNumber) {
+    if (equalWasPressed === true) {
+        clearDisplays();
+        clearMemory();
+        equalWasPressed = false;
+    }
+    lastButtonPressed = "NUMBER";
     if (primaryDisplay.textContent.length <= 15) {
         primaryDisplay.textContent += stringOfNumber;
     }
 }
-
 function clearMemory() {
     firstNum = 0;
     secondNum = 0;
     operator = "";
     inCalculating = false;
+    isNewCalc = false;
 }
 function clearDisplays() {
     primaryDisplay.textContent = "";
     secondaryDisplay.textContent = "";
 }
 
-let inCalculating = false;
-let result = 0;
 function operate(stringOfOperator) {
     // saving the two numbers in memory
     if (!inCalculating) {
+        equalWasPressed = false;
         firstNum = parseFloat(primaryDisplay.textContent);
         inCalculating = true;
         result = firstNum;
@@ -174,6 +179,7 @@ function operate(stringOfOperator) {
         secondaryDisplay.textContent = "";
 
         inCalculating = false;
+        equalWasPressed = true;
     } else {
         secondaryDisplay.textContent = result;
     }
