@@ -1,10 +1,10 @@
-const buttonContainer = document.getElementById('button-container');
+const buttonContainer = document.getElementById("button-container");
 const primaryDisplay = document.getElementById("displayedNumbers");
 const secondaryDisplay = document.getElementById("previousCalc");
 
-let currentNum = 0;
-let prevNum = 0;
-let calcedResult = 0;
+let firstNum = 0;
+let secondNum = 0;
+let operator = "";
 
 const buttonMap = [
     { id: "pow", label: "x²" },
@@ -30,86 +30,153 @@ const buttonMap = [
     { id: "plusMinus", label: "+/−" },
     { id: "zero", label: "0" },
     { id: "dot", label: "." },
-    { id: "equal", label: "=" }
+    { id: "equal", label: "=" },
 ];
 
 for (let i = 0; i < buttonMap.length; i++) {
-    const buttonElement = document.createElement('button');
-    buttonElement.className = 'calc-button';
+    const buttonElement = document.createElement("button");
+    buttonElement.className = "calc-button";
     buttonElement.id = `${buttonMap[i].id}`;
     buttonElement.textContent = buttonMap[i].label;
 
-    buttonElement.addEventListener('click', (e) => buttonPressed(e));
+    buttonElement.addEventListener("click", (e) => buttonPressed(e));
 
     buttonContainer.appendChild(buttonElement);
 }
 function buttonPressed(e) {
-    console.log(e.target.id);
-
     switch (e.target.id) {
+        case "pow":
+            operate("");
+            break;
+        case "sqr":
+            operate("");
+            break;
+        case "clear":
+            clearMemory();
+            clearDisplays();
+            console.clear();
+            break;
+        case "divide":
+            operate("/");
+            break;
 
-        case 'pow': break;
-        case 'sqr': break;
-        case 'clear': clearMemory(); break;
-        case 'divide': division(); break;
+        case "seven":
+            appendPrimaryDisplay("7");
+            break;
+        case "eight":
+            appendPrimaryDisplay("8");
+            break;
+        case "nine":
+            appendPrimaryDisplay("9");
+            break;
+        case "multiply":
+            operate("*");
+            break;
 
-        case 'seven': appendPrimaryDisplay('7'); break;
-        case 'eight': appendPrimaryDisplay('8'); break;
-        case 'nine': appendPrimaryDisplay('9'); break;
-        case 'multiply': multiplication(); break;
+        case "four":
+            appendPrimaryDisplay("4");
+            break;
+        case "five":
+            appendPrimaryDisplay("5");
+            break;
+        case "six":
+            appendPrimaryDisplay("6");
+            break;
+        case "minus":
+            operate("-");
+            break;
 
-        case 'four': appendPrimaryDisplay('4'); break;
-        case 'five': appendPrimaryDisplay('5'); break;
-        case 'six': appendPrimaryDisplay('6'); break;
-        case 'minus': substraction(); break;
+        case "one":
+            appendPrimaryDisplay("1");
+            break;
+        case "two":
+            appendPrimaryDisplay("2");
+            break;
+        case "three":
+            appendPrimaryDisplay("3");
+            break;
+        case "plus":
+            operate("+");
+            break;
 
-        case 'one': appendPrimaryDisplay('1'); break;
-        case 'two': appendPrimaryDisplay('2'); break;
-        case 'three': appendPrimaryDisplay('3'); break;
-        case 'plus': addition(); break;
+        case "plusMinus":
+            operate("");
+            break;
+        case "zero":
+            appendPrimaryDisplay("0");
+            break;
+        case "dot":
+            appendPrimaryDisplay(".");
+            break;
+        case "equal":
+            operate("=");
+            break;
 
-        case 'plusMinus': break;
-        case 'zero': appendPrimaryDisplay('0'); break;
-        case 'dot': appendPrimaryDisplay('.'); break;
-        case 'equal': break;
-
-        default: break;
+        default:
+            break;
     }
 }
 
+let wasNumberAfter = false;
 function appendPrimaryDisplay(stringOfNumber) {
     if (primaryDisplay.textContent.length <= 15) {
         primaryDisplay.textContent += stringOfNumber;
     }
 }
 
-function addition() {
+function clearMemory() {
+    firstNum = 0;
+    secondNum = 0;
+    operator = "";
+    inCalculating = false;
 }
-function substraction() {
-
-}
-
-function multiplication() {
-}
-function division() {
-}
-function equal() {
-
-}
-
-function operate() {
-
-}
-
 function clearDisplays() {
     primaryDisplay.textContent = "";
     secondaryDisplay.textContent = "";
 }
-function clearMemory() {
-    primaryDisplay.textContent = "";
-    secondaryDisplay.textContent = "";
-    currentNum = 0;
-    prevNum = 0;
-    calcedResult = 0;
-}
 
+let inCalculating = false;
+let result = 0;
+function operate(stringOfOperator) {
+    // saving the two numbers in memory
+    if (!inCalculating) {
+        firstNum = parseFloat(primaryDisplay.textContent);
+        inCalculating = true;
+        result = firstNum;
+    } else {
+        secondNum = parseFloat(primaryDisplay.textContent);
+        // calculating the result
+        switch (operator) {
+            case "+":
+                result = firstNum + secondNum;
+                break;
+            case "-":
+                result = firstNum - secondNum;
+                break;
+            case "/":
+                result = firstNum / secondNum;
+                break;
+            case "*":
+                result = firstNum * secondNum;
+                break;
+            default:
+                break;
+        }
+    }
+
+    operator = stringOfOperator;
+
+    primaryDisplay.textContent = "";
+    if (operator === "=") {
+        firstNum = result;
+
+        primaryDisplay.textContent = result;
+        secondaryDisplay.textContent = "";
+
+        inCalculating = false;
+    } else {
+        secondaryDisplay.textContent = result;
+    }
+
+    firstNum = result;
+}
