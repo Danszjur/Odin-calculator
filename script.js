@@ -52,10 +52,10 @@ for (let i = 0; i < buttonMap.length; i++) {
 function buttonPressed(e) {
     switch (e.target.id) {
         case "pow":
-            operate("");
+            operate("x2");
             break;
         case "sqr":
-            operate("");
+            operate("sqr");
             break;
         case "clear":
             clearMemory();
@@ -102,7 +102,7 @@ function buttonPressed(e) {
             operate("+");
             break;
         case "plusMinus":
-            operate("");
+            operate("+/-");
             break;
         case "zero":
             appendPrimaryDisplay("0");
