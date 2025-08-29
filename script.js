@@ -1,10 +1,17 @@
-const buttonContainer = document.getElementById('button-container');
+const buttonContainer = document.getElementById("button-container");
 const primaryDisplay = document.getElementById("displayedNumbers");
 const secondaryDisplay = document.getElementById("previousCalc");
 
 let firstNum = 0;
 let secondNum = 0;
 let operator = "";
+
+let equalWasPressed = true;
+
+let isNewCalc = true;
+
+let inCalculating = false;
+let result = 0;
 
 const buttonMap = [
     { id: "pow", label: "x²" },
@@ -30,62 +37,104 @@ const buttonMap = [
     { id: "plusMinus", label: "+/−" },
     { id: "zero", label: "0" },
     { id: "dot", label: "." },
-    { id: "equal", label: "=" }
+    { id: "equal", label: "=" },
 ];
-
 for (let i = 0; i < buttonMap.length; i++) {
-    const buttonElement = document.createElement('button');
-    buttonElement.className = 'calc-button';
+    const buttonElement = document.createElement("button");
+    buttonElement.className = "calc-button";
     buttonElement.id = `${buttonMap[i].id}`;
     buttonElement.textContent = buttonMap[i].label;
 
-    buttonElement.addEventListener('click', (e) => buttonPressed(e));
+    buttonElement.addEventListener("click", (e) => buttonPressed(e));
 
     buttonContainer.appendChild(buttonElement);
 }
 function buttonPressed(e) {
-
     switch (e.target.id) {
+        case "pow":
+            operate("x2");
+            break;
+        case "sqr":
+            operate("sqr");
+            break;
+        case "clear":
+            clearMemory();
+            clearDisplays();
+            console.clear();
+            break;
+        case "divide":
+            operate("/");
+            break;
+        case "seven":
+            appendPrimaryDisplay("7");
+            break;
+        case "eight":
+            appendPrimaryDisplay("8");
+            break;
+        case "nine":
+            appendPrimaryDisplay("9");
+            break;
+        case "multiply":
+            operate("*");
+            break;
+        case "four":
+            appendPrimaryDisplay("4");
+            break;
+        case "five":
+            appendPrimaryDisplay("5");
+            break;
+        case "six":
+            appendPrimaryDisplay("6");
+            break;
+        case "minus":
+            operate("-");
+            break;
+        case "one":
+            appendPrimaryDisplay("1");
+            break;
+        case "two":
+            appendPrimaryDisplay("2");
+            break;
+        case "three":
+            appendPrimaryDisplay("3");
+            break;
+        case "plus":
+            operate("+");
+            break;
+        case "plusMinus":
+            operate("+/-");
+            break;
+        case "zero":
+            appendPrimaryDisplay("0");
+            break;
+        case "dot":
+            appendPrimaryDisplay(".");
+            break;
+        case "equal":
+            operate("=");
+            break;
 
-        case 'pow': operate(''); break;
-        case 'sqr': operate(''); break;
-        case 'clear': clearMemory(); clearDisplays(); console.clear(); break;
-        case 'divide': operate('/'); break;
-
-        case 'seven': appendPrimaryDisplay('7'); break;
-        case 'eight': appendPrimaryDisplay('8'); break;
-        case 'nine': appendPrimaryDisplay('9'); break;
-        case 'multiply': operate('*'); break;
-
-        case 'four': appendPrimaryDisplay('4'); break;
-        case 'five': appendPrimaryDisplay('5'); break;
-        case 'six': appendPrimaryDisplay('6'); break;
-        case 'minus': operate('-'); break;
-
-        case 'one': appendPrimaryDisplay('1'); break;
-        case 'two': appendPrimaryDisplay('2'); break;
-        case 'three': appendPrimaryDisplay('3'); break;
-        case 'plus': operate('+'); break;
-
-        case 'plusMinus': operate(''); break;
-        case 'zero': appendPrimaryDisplay('0'); break;
-        case 'dot': appendPrimaryDisplay('.'); break;
-        case 'equal': operate('='); break;
-
-        default: break;
+        default:
+            break;
     }
 }
-
 function appendPrimaryDisplay(stringOfNumber) {
+    if (equalWasPressed === true) {
+        clearDisplays();
+        clearMemory();
+        equalWasPressed = false;
+    }
+    lastButtonPressed = "NUMBER";
     if (primaryDisplay.textContent.length <= 15) {
         primaryDisplay.textContent += stringOfNumber;
     }
 }
-
 function clearMemory() {
     firstNum = 0;
     secondNum = 0;
     operator = "";
+    inCalculating = false;
+    isNewCalc = false;
 }
 function clearDisplays() {
     primaryDisplay.textContent = "";
@@ -93,35 +142,47 @@ function clearDisplays() {
 }
 
 function operate(stringOfOperator) {
-    switch (operator) {
-        case '+':
-            firstNum = parseFloat(primaryDisplay.textContent) + firstNum;
-            break;
-        case '/':
-            firstNum = parseFloat(primaryDisplay.textContent) / firstNum;
-            break;
-        case '-':
-            firstNum = parseFloat(primaryDisplay.textContent) - firstNum;
-            break;
-        case '*':
-            console.log(` elso szam${firstNum}`);
-
-            firstNum = parseFloat(primaryDisplay.textContent) * firstNum;
-            break;
-        case '':
-            firstNum = parseFloat(primaryDisplay.textContent);
-            break;
-        case '=':
-            firstNum = parseFloat(primaryDisplay.textContent);
-            break;
-
-        default:
-            break;
+    // saving the two numbers in memory
+    if (!inCalculating) {
+        equalWasPressed = false;
+        firstNum = parseFloat(primaryDisplay.textContent);
+        inCalculating = true;
+        result = firstNum;
+    } else {
+        secondNum = parseFloat(primaryDisplay.textContent);
+        // calculating the result
+        switch (operator) {
+            case "+":
+                result = firstNum + secondNum;
+                break;
+            case "-":
+                result = firstNum - secondNum;
+                break;
+            case "/":
+                result = firstNum / secondNum;
+                break;
+            case "*":
+                result = firstNum * secondNum;
+                break;
+            default:
+                break;
+        }
     }
 
     operator = stringOfOperator;
-    clearDisplays();
-    console.log(firstNum);
 
+    primaryDisplay.textContent = "";
+    if (operator === "=") {
+        firstNum = result;
+
+        primaryDisplay.textContent = result;
+        secondaryDisplay.textContent = "";
+
+        inCalculating = false;
+        equalWasPressed = true;
+    } else {
+        secondaryDisplay.textContent = result;
+    }
+
+    firstNum = result;
 }
-
